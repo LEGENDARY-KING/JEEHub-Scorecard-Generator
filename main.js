@@ -1,8 +1,24 @@
+// ==UserScript==
+// @name         JEEHub Scorecard Generator
+// @namespace    http://tampermonkey.net/
+// @version      2024-04-25
+// @description  Generates scorecard
+// @author       Legendary
+// @match        https://www.tampermonkey.net/scripts.php
+// @icon         https://jeehub.vercel.app/favicon.ico
+// @grant        none
+// @match      https://bitsat-quiz.jee-adv.eu.org/*
+// @match      https://jeehub.vercel.app/*
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
 function scorecardGenerator() {
   let style = `<style>
 .bg-green-500{
         background-color:rgb(255 0 196);
-        
+
     }
 .border-green-500{
         border-color:rgb(255 0 196);
@@ -20,7 +36,7 @@ display:none;
 .tansition-all {
 display:none;
 }
-        
+
 </style>`;
 
   document.head.insertAdjacentHTML("beforeend", style);
@@ -38,7 +54,7 @@ display:none;
     let style = `<style>
 .bg-green-500{
        background-color: rgb(34 197 94/var(--tw-bg-opacity))
-        
+
     }
 .border-green-500{
        border-color: rgb(34 197 94/var(--tw-bg-opacity))
@@ -56,7 +72,7 @@ display:block;
 .tansition-all {
 display:block;
 }
-        
+
 </style>`;
 
     document.head.insertAdjacentHTML("beforeend", style);
@@ -88,7 +104,7 @@ Subject Wise Performance:
 `;
 
     if (totalQns == 130) {
-      for (qn of correctqns) {
+      for (let qn of correctqns) {
         let qnN = parseInt(qn.innerHTML.replace(/\D/g, ""));
         if (qnN < 31) cPhys++;
         else if (qnN < 61) cChem++;
@@ -96,7 +112,7 @@ Subject Wise Performance:
         else if (qnN < 91) cLR++;
         else cMath++;
       }
-      for (qn of incorrectqns) {
+      for (let qn of incorrectqns) {
         let qnN = parseInt(qn.innerHTML.replace(/\D/g, ""));
         if (qnN < 31) incPhys++;
         else if (qnN < 61) incChem++;
@@ -124,7 +140,7 @@ Marks Lost: ${incLR}                            | Marks Lost: ${incMath}
 Accuracy: ${(cLR / (incLR + cLR)) * 100}%             | Accuracy: ${(cMath / (incMath + cMath)) * 100}%
 `;
     } else if (totalQns == 150) {
-      for (qn of correctqns) {
+      for (let qn of correctqns) {
         let qnN = parseInt(qn.innerHTML.replace(/\D/g, ""));
         if (qnN < 41) cPhys++;
         else if (qnN < 81) cChem++;
@@ -132,7 +148,7 @@ Accuracy: ${(cLR / (incLR + cLR)) * 100}%             | Accuracy: ${(cMath / (in
         else if (qnN < 106) cLR++;
         else cMath++;
       }
-      for (qn of incorrectqns) {
+      for (let qn of incorrectqns) {
         let qnN = parseInt(qn.innerHTML.replace(/\D/g, ""));
         if (qnN < 41) incPhys++;
         else if (qnN < 81) incChem++;
@@ -205,15 +221,13 @@ let scoreCardInterval = setInterval(() => {
     !["bitsat-quiz.jee-adv.eu.org", "jeehub.vercel.app"].includes(
       document.location.hostname,
     )
-  )
-    return clearInterval(scoreCardInterval);
+  ) return clearInterval(scoreCardInterval);
 
   if (document.location.href.includes("mock-test")) {
     let scorecardButton = document.getElementById("scorecard-generator");
-    if (!scorecardButton || scorecardButton.style["display"] == "none")
-      return scorecardGenerator();
+    if (!scorecardButton || scorecardButton.style.display == "none") return scorecardGenerator();
   } else {
     let scorecardButton = document.getElementById("scorecard-generator");
-    if (scorecardButton) scorecardButton.style["display"] = "none";
+    if (scorecardButton) scorecardButton.style.display = "none";
   }
-}, 1000);
+}, 1000);})();
